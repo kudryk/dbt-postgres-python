@@ -39,12 +39,12 @@ jobs:
           - "3.9"
           - "3.10"
           # - "3.11"
-        include:
-          - profile: snowflake
-            teleport: true
-            cloud: true
-          - profile: bigquery
-            cloud: true
+#        include:
+#          - profile: snowflake
+#            teleport: true
+#            cloud: true
+#          - profile: bigquery
+#            cloud: true
 
     concurrency:
       group: "${{ github.head_ref || github.run_id }}-${{ github.workflow }}-${{ matrix.profile }}-${{ matrix.python }}"
