@@ -61,12 +61,8 @@ jobs:
         run: |
           OPTIONS = [
             'postgres',
-            'bigquery',
-            'snowflake',
-            'fal'
           ]
           EXTRA_OPTIONS = [
-            'duckdb',
           ]
           OUTPUT = OPTIONS
 
