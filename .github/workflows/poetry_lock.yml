@@ -43,5 +43,4 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Poetry lock updated
-          commit_user_email: hello@fal.ai
-          commit_user_name: Fal Bot
+          commit_user_email: kudryk@me.com
