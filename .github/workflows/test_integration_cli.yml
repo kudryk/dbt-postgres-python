@@ -27,10 +27,6 @@ on:
         options:
           - "<ALL>"
           - postgres
-          - bigquery
-          - snowflake
-          - duckdb
-          - fal
 
       python:
         description: Python version to test with
