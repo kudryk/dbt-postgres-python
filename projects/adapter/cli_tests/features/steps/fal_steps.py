@@ -3,7 +3,6 @@ import os
 import shlex
 from typing import List, Optional
 from behave import *
-import glob
 from fal.dbt.cli import cli
 import tempfile
 import json
