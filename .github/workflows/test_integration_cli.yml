@@ -103,7 +103,9 @@ jobs:
               OUTPUT = [INPUT_CHOICE]
 
           import json
-          print("::set-output name=list::" + json.dumps(OUTPUT))
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output_fp:
+              print(f'list={json.dumps(OUTPUT)}', file=output_fp)
 
   matrix-python:
     runs-on: ubuntu-latest
@@ -152,7 +154,9 @@ jobs:
               OUTPUT = [INPUT_CHOICE]
 
           import json
-          print("::set-output name=list::" + json.dumps(OUTPUT))
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output_fp:
+              print(f'list={json.dumps(OUTPUT)}', file=output_fp)
 
   matrix-dbt:
     runs-on: ubuntu-latest
@@ -175,7 +179,9 @@ jobs:
               OUTPUT = [INPUT_CHOICE]
 
           import json
-          print("::set-output name=list::" + json.dumps(OUTPUT))
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output_fp:
+              print(f'list={json.dumps(OUTPUT)}', file=output_fp)
 
   run:
     needs:
