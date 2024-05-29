@@ -27,10 +27,10 @@ on:
         options:
           - "<ALL>"
           - postgres
+          - fal
 #          - bigquery
 #          - snowflake
 #          - duckdb
-#          - fal
 
       python:
         description: Python version to test with
@@ -64,10 +64,10 @@ jobs:
         shell: python
         run: |
           OPTIONS = [
-            'postgres'
+            'postgres',
+            'fal'
            # 'bigquery',
            # 'snowflake',
-           # 'fal'
           ]
           EXTRA_OPTIONS = [
            # 'duckdb',
