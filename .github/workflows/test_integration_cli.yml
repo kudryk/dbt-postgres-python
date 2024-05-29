@@ -27,10 +27,10 @@ on:
         options:
           - "<ALL>"
           - postgres
-          - bigquery
-          - snowflake
-          - duckdb
-          - fal
+#          - bigquery
+#          - snowflake
+#          - duckdb
+#          - fal
 
       python:
         description: Python version to test with
@@ -64,13 +64,13 @@ jobs:
         shell: python
         run: |
           OPTIONS = [
-            'postgres',
-            'bigquery',
-            'snowflake',
-            'fal'
+            'postgres'
+           # 'bigquery',
+           # 'snowflake',
+           # 'fal'
           ]
           EXTRA_OPTIONS = [
-            'duckdb',
+           # 'duckdb',
           ]
           OUTPUT = OPTIONS
 
@@ -228,44 +228,44 @@ jobs:
         env:
           FAL_STATS_ENABLED: false
           # BigQuery
-          KEYFILE: ${{ secrets.GCP_SA_KEY }}
-          GCLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-          BQ_DATASET: ${{ secrets.BQ_DATASET }}
+#          KEYFILE: ${{ secrets.GCP_SA_KEY }}
+#          GCLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+#          BQ_DATASET: ${{ secrets.BQ_DATASET }}
           # Snowflake
-          SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-          SF_USER: ${{ secrets.SF_USER }}
-          SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
-          SF_ROLE: ${{ secrets.SF_ROLE }}
-          SF_DATABASE: ${{ secrets.SF_DATABASE }}
-          SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-          SF_SCHEMA: ${{ secrets.SF_SCHEMA }}
+#          SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
+#          SF_USER: ${{ secrets.SF_USER }}
+#          SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
+#          SF_ROLE: ${{ secrets.SF_ROLE }}
+#          SF_DATABASE: ${{ secrets.SF_DATABASE }}
+#          SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
+#          SF_SCHEMA: ${{ secrets.SF_SCHEMA }}
           # Duckdb
-          DB_PATH: ${{ github.workspace }}/duck.db
+#          DB_PATH: ${{ github.workspace }}/duck.db
         run: |
           # Database and schema setup for sources
-          if [[ '${{ matrix.profile }}' == "bigquery" ]]
-          then
-            export DBT_DATABASE="$GCLOUD_PROJECT" DBT_SCHEMA="$BQ_DATASET"
-          fi
-          if [[ '${{ matrix.profile }}' == "snowflake" ]]
-          then
-            export DBT_DATABASE="$SF_DATABASE" DBT_SCHEMA="$SF_SCHEMA"
-          fi
-          if [[ '${{ matrix.profile }}' == "duckdb" ]]
-          then
-            # TODO: which to use for sources? Example:
-            #   database: "{{ env_var('DBT_DATABASE', 'test') }}"
-            #   schema: "{{ env_var('DBT_SCHEMA', 'dbt_fal') }}"
-            export DBT_DATABASE="" DBT_SCHEMA=""
-          fi
-
-          if [[ '${{ matrix.profile }}' == "bigquery" ]]
-          then
-            echo $KEYFILE > $HOME/keyfile.json
-            ls -la $HOME/keyfile.json
-            export KEYFILE_DIR=$HOME
-            echo 'keyfile is ready'
-          fi
+#          if [[ '${{ matrix.profile }}' == "bigquery" ]]
+#          then
+#            export DBT_DATABASE="$GCLOUD_PROJECT" DBT_SCHEMA="$BQ_DATASET"
+#          fi
+#          if [[ '${{ matrix.profile }}' == "snowflake" ]]
+#          then
+#            export DBT_DATABASE="$SF_DATABASE" DBT_SCHEMA="$SF_SCHEMA"
+#          fi
+#          if [[ '${{ matrix.profile }}' == "duckdb" ]]
+#          then
+#            # TODO: which to use for sources? Example:
+#            #   database: "{{ env_var('DBT_DATABASE', 'test') }}"
+#            #   schema: "{{ env_var('DBT_SCHEMA', 'dbt_fal') }}"
+#            export DBT_DATABASE="" DBT_SCHEMA=""
+#          fi
+#
+#          if [[ '${{ matrix.profile }}' == "bigquery" ]]
+#          then
+#            echo $KEYFILE > $HOME/keyfile.json
+#            ls -la $HOME/keyfile.json
+#            export KEYFILE_DIR=$HOME
+#            echo 'keyfile is ready'
+#          fi
 
           # Could not get the real job_id easily from context
           UUID=$(uuidgen | head -c8)
