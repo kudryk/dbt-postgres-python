@@ -9,7 +9,7 @@ on:
       - ".github/workflows/test_integration_cli.yml"
 
   push:
-    branches: [main]
+#    branches: [main]
     paths:
       - "projects/adapter/**"
 
