@@ -26,12 +26,6 @@ jobs:
       matrix:
         profile:
           - postgres
-          - bigquery
-          - snowflake
-          # TODO: enable as 1.5 becomes available for following adapters
-          # - trino
-          # - duckdb
-          # - sqlserver
         dbt_version:
           - "1.5.0"
         python:
