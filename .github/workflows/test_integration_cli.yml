@@ -8,51 +8,51 @@ on:
       - ".github/actions/setup-local-fal/**"
       - ".github/workflows/test_integration_cli.yml"
 
-  push:
+#  push:
 #    branches: [main]
-    paths:
-      - "projects/adapter/**"
+#    paths:
+#      - "projects/adapter/**"
 
   schedule:
     # every monday
     - cron: "0 0 * * 1"
 
   workflow_dispatch:
-    inputs:
-      adapter:
-        description: dbt Adapter to test with
-        required: false
-        default: "<ALL>"
-        type: choice
-        options:
-          - "<ALL>"
-          - postgres
-          - fal
+#    inputs:
+#      adapter:
+#        description: dbt Adapter to test with
+#        required: false
+#        default: "<ALL>"
+#        type: choice
+#        options:
+#          - "<ALL>"
+#          - postgres
+#          - fal
 #          - bigquery
 #          - snowflake
 #          - duckdb
 
-      python:
-        description: Python version to test with
-        required: false
-        default: "3.8"
-        type: choice
-        options:
-          - "<ALL>"
-          - "3.8"
-          - "3.9"
-          - "3.10"
-          - "3.11"
+#      python:
+#        description: Python version to test with
+#        required: false
+#        default: "3.8"
+#        type: choice
+#        options:
+#          - "<ALL>"
+#          - "3.8"
+#          - "3.9"
+#          - "3.10"
+#          - "3.11"
 
-      dbt:
-        description: dbt version to test with
-        required: false
-        default: "latest"
-        type: choice
-        options:
-          - "<ALL>"
-          - "latest"
-          - "1.5.*"
+#      dbt:
+#        description: dbt version to test with
+#        required: false
+#        default: "latest"
+#        type: choice
+#        options:
+#          - "<ALL>"
+#          - "latest"
+#          - "1.5.*"
 
 jobs:
   matrix-adapter:
