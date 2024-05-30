@@ -121,7 +121,7 @@ def _load_dbt_result_file(context):
     o = Path(os.path.join(target_path(context), "run_results.json"))
     print(f"_load_dbt_result_file {o} exists: {o.exists()}")
 
-    for parent in list(o.parents)[:2]:
+    for parent in list(o.parents):
         print(f"_load_dbt_result_file: Searching from parent {parent}")
 
         for f in parent.glob("**/run_results.json"):
