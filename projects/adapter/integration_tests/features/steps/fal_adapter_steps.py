@@ -68,8 +68,6 @@ def set_project_folder(context, project: str):
     context.base_dir = str(project_path)
     context.temp_dir = tempfile.TemporaryDirectory()
     context.project_name = _load_dbt_project_file(context)["name"]
-    os.environ["project_dir"] = context.base_dir
-    os.environ["temp_dir"] = context.temp_dir.name
     os.environ["DBT_TARGET_PATH"] = target_path(context)
 
 
