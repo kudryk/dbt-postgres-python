@@ -22,6 +22,11 @@ def run_command_step(context):
     context.shell_stderr = None
 
     command = _replace_vars(context, context.text)
+
+    #DEBUG
+    print(f"SHELL COMMAND: {command}")
+    # os.system(command)
+
     try:
         process = subprocess.run(command, shell=True, capture_output=True)
         context.shell_stdout = process.stdout.decode("utf-8")
