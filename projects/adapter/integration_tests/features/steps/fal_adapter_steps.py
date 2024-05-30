@@ -68,6 +68,8 @@ def set_project_folder(context, project: str):
     context.base_dir = str(project_path)
     context.temp_dir = tempfile.TemporaryDirectory()
     context.project_name = _load_dbt_project_file(context)["name"]
+    os.environ["project_dir"] = context.base_dir
+    os.environ["temp_dir"] = context.temp_dir.name
     os.environ["DBT_TARGET_PATH"] = target_path(context)
 
 
@@ -117,15 +119,15 @@ def _get_dated_dbt_models(context):
 def _load_dbt_result_file(context):
 
     # DEBUG
-    from pathlib import Path
-    o = Path(os.path.join(target_path(context), "run_results.json"))
-    print(f"_load_dbt_result_file {o} exists: {o.exists()}")
+    # from pathlib import Path
+    # o = Path(os.path.join(target_path(context), "run_results.json"))
+    # print(f"_load_dbt_result_file {o} exists: {o.exists()}")
 
-    for parent in list(o.parents):
-        print(f"_load_dbt_result_file: Searching from parent {parent}")
-
-        for f in parent.glob("**/run_results.json"):
-            print(f"_load_dbt_result_file: Found: {f}")
+    # for parent in list(o.parents):
+    #     print(f"_load_dbt_result_file: Searching from parent {parent}")
+    #
+    #     for f in parent.glob("**/run_results.json"):
+    #         print(f"_load_dbt_result_file: Found: {f}")
 
     # END DEBUG
 
