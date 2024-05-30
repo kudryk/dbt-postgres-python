@@ -15,10 +15,10 @@ def pytest_configure(config):
     """
     os.environ['FAL_STATS_ENABLED'] = 'False'
 
-    tests_path = Path(__file__).parent
-    target_path = tests_path / 'mock' / 'mockTarget'
+    # tests_path = Path(__file__).parent
+    # target_path = tests_path / 'mock' / 'mockTarget'
     # TODO (target-path): Wait for https://github.com/dbt-labs/dbt-core/issues/7465 to be fixed
-    os.environ['DBT_TARGET_PATH'] = str(target_path)
+    # os.environ['DBT_TARGET_PATH'] = str(target_path)
 
 def _delete_dot_git_at(path):
     for root, dirs, files in os.walk(path):
