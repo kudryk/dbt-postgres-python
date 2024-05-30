@@ -18,6 +18,7 @@ Feature: dbt-fal can query sources
     Then the following models are calculated in order:
       | model_a |
 
+  @skip  # FAL cloud not supported
   @cloud
   Scenario: Run a Python model that queries a source with Isolate Cloud
     When the following shell command is invoked:

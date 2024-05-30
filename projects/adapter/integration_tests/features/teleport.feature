@@ -1,3 +1,4 @@
+@skip   # Not supported. Presently no DBT target "staging_with_teleport" exists.
 @teleport
 Feature: Teleporting data
   Background: Project Setup

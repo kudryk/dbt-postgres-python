@@ -7,6 +7,7 @@ fal_test:
     staging:
       type: fal
       db_profile: db
+    # TODO: delete prod target
     prod:
       type: fal
       db_profile: db
