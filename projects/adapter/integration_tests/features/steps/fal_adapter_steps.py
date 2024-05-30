@@ -116,20 +116,26 @@ def _get_dated_dbt_models(context):
 
 def _load_dbt_result_file(context):
 
-    # DEBUG
-    from pathlib import Path
-    o = Path(os.path.join(target_path(context), "run_results.json"))
-    print(f"_load_dbt_result_file {o} exists: {o.exists()}")
+    results_file = Path(os.path.join(target_path(context), "run_results.json"))
 
-    for parent in list(o.parents)[:2]:
-        print(f"_load_dbt_result_file: Searching from parent {parent}")
+    if not results_file.exists():
+        # HACK: For some reason I have yet to figure out, the results file is getting placed in a mockTarget
+        # directory.
+        results_file = results_file.absolute()
+        root_dir = Path(results_file.root)
+        matches = list(root_dir.glob("**/run_results.json"))
+        if not matches:
+            raise Exception("Failed to find run_results.json")
+        elif len(matches) == 1:
+            results_file = matches[0]
+            print(f"############ FOUND RUN_RESULTS.JSON ELSEWHERE: {str(results_file)}")
+        else:
+            files = ", ".join(map(str, matches))
+            raise Exception(f"Found multiple files: {files}")
+    else:
+        print("############ FOUND RUN_RESULTS.JSON IN TARGET PATH")
 
-        for f in parent.glob("**/run_results.json"):
-            print(f"_load_dbt_result_file: Found: {f}")
-
-    # END DEBUG
-
-    with open(os.path.join(target_path(context), "run_results.json")) as stream:
+    with open(results_file) as stream:
         return json.load(stream)["results"]
 
 
