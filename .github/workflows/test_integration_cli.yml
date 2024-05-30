@@ -246,7 +246,7 @@ jobs:
             BEHAVE_TAGS="$BEHAVE_TAGS --tags=-broken_profile"
           fi
 
-          behave $BEHAVE_TAGS -fplain -D profile=${{ matrix.profile }}
+          behave $BEHAVE_TAGS -fplain -D profile=${{ matrix.profile }} --no-capture
 
       - name: Send custom JSON data to Slack workflow
         if: false

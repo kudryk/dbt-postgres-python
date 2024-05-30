@@ -387,6 +387,10 @@ def _get_dated_fal_artifacts(context, *kinds):
 
 
 def _load_dbt_result_file(context):
+
+    temp = target_path(context, "run_results.json")
+    print(f"RUN_RESULTS location is {temp}")
+
     with open(
         target_path(context, "run_results.json")
     ) as stream:
