@@ -25,19 +25,19 @@ def run_command_step(context):
 
     #DEBUG
     print(f"SHELL COMMAND: {command}")
-    # os.system(command)
+    os.system(command)
 
-    try:
-        process = subprocess.run(command, shell=True, capture_output=True)
-        context.shell_stdout = process.stdout.decode("utf-8")
-        context.shell_stderr = process.stderr.decode("utf-8")
-
-        if process.returncode != 0:
-            raise subprocess.CalledProcessError(
-                process.returncode, command, context.shell_stdout, context.shell_stderr
-            )
-    except BaseException as e:
-        context.exc = e
+    # try:
+    #     process = subprocess.run(command, shell=True, capture_output=True)
+    #     context.shell_stdout = process.stdout.decode("utf-8")
+    #     context.shell_stderr = process.stderr.decode("utf-8")
+    #
+    #     if process.returncode != 0:
+    #         raise subprocess.CalledProcessError(
+    #             process.returncode, command, context.shell_stdout, context.shell_stderr
+    #         )
+    # except BaseException as e:
+    #     context.exc = e
 
 @then("there should be no errors")
 def check_no_errors(context):
