@@ -40,16 +40,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-        with:
-          path: "fal"
 
       - name: Start Docker database
-        working-directory: fal/projects/adapter/cli_tests
+        working-directory: projects/adapter/cli_tests
         if: contains(fromJSON('["postgres"]'), matrix.profile)
         run: docker-compose up -d
 
       - name: Start trino
-        working-directory: fal/projects/adapter/integration_tests/configs/trino
+        working-directory: projects/adapter/integration_tests/configs/trino
         if: contains(fromJSON('["trino"]'), matrix.profile)
         run: docker-compose up -d
 
@@ -64,13 +62,13 @@ jobs:
           sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
 
       - name: Start sqlserver
-        working-directory: fal/projects/adapter/integration_tests/configs/sqlserver
+        working-directory: projects/adapter/integration_tests/configs/sqlserver
         if: contains(fromJSON('["sqlserver"]'), matrix.profile)
         run: |
           docker-compose up -d
 
       - name: Setup latest dependencies
-        working-directory: fal/projects/adapter/integration_tests
+        working-directory: projects/adapter/integration_tests
         run: |
           python -m venv .venv
           source .venv/bin/activate
@@ -103,12 +101,12 @@ jobs:
           popd
 
       - name: Setup behave
-        working-directory: fal/projects/adapter/integration_tests
+        working-directory: projects/adapter/integration_tests
         run: pip install behave
 
       - name: Run tests
         id: test_run
-        working-directory: fal/projects/adapter/integration_tests
+        working-directory: projects/adapter/integration_tests
         env:
           FAL_STATS_ENABLED: false
           # Teleport
