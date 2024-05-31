@@ -30,9 +30,9 @@ jobs:
           - "1.5.9"
         python:
           - "3.8"
-          # - "3.9"
-          # - "3.10"
-          # - "3.11"
+          - "3.9"
+          - "3.10"
+          - "3.11"
 
     concurrency:
       group: "${{ github.head_ref || github.run_id }}-${{ github.workflow }}-${{ matrix.profile }}-${{ matrix.python }}"
