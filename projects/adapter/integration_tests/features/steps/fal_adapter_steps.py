@@ -12,6 +12,7 @@ import re
 
 
 def target_path(context):
+    print(f"TP: {str(Path(context.temp_dir.name) / 'target')}")
     return str(Path(context.temp_dir.name) / "target")
 
 
@@ -22,16 +23,29 @@ def run_command_step(context):
     context.shell_stderr = None
 
     command = _replace_vars(context, context.text)
+    print(f"RUN_COMMAND_STEP(before) command: {command}")
+    print(f"RUN_COMMAND_STEP(before) temp_dir: {context.temp_dir.name}  exists = {Path(context.temp_dir.name).exists()}")
+    print(f"RUN_COMMAND_STEP(before) project_name: {context.project_name}")
+
     try:
         process = subprocess.run(command, shell=True, capture_output=True)
         context.shell_stdout = process.stdout.decode("utf-8")
         context.shell_stderr = process.stderr.decode("utf-8")
 
+        print(f"RUN_COMMAND_STEP(after) temp_dir: {context.temp_dir.name}  exists = {Path(context.temp_dir.name).exists()}")
+        print(f"RUN_COMMAND_STEP(after) project_name: {context.project_name}")
+
+        print(f"RUN_COMMAND_STEP(after) output*******************\n\n\n")
+        print(context.shell_stdout)
+        print(f"\n\n\nRUN_COMMAND_STEP(after) output*******************\n")
+
         if process.returncode != 0:
+            print(f"RUN_COMMAND_STEP(error) return_code: {process.returncode}")
             raise subprocess.CalledProcessError(
                 process.returncode, command, context.shell_stdout, context.shell_stderr
             )
     except BaseException as e:
+        print(f"RUN_COMMAND_STEP(exception) {str(e)}")
         context.exc = e
 
 @then("there should be no errors")
@@ -65,9 +79,18 @@ def set_project_folder(context, project: str):
         finally:
             raise ValueError(f"Project {project} not found. {extra}")
 
+    print("SET_PROJECT_FOLDER*******************")
+
     context.base_dir = str(project_path)
     context.temp_dir = tempfile.TemporaryDirectory()
     context.project_name = _load_dbt_project_file(context)["name"]
+
+    print(f"SET_PROJECT_FOLDER DBT_TARGET_PATH = {os.getenv('DBT_TARGET_PATH', '<not set>')}")
+    print(f"SET_PROJECT_FOLDER base_dir: {str(project_path)}")
+    print(f"SET_PROJECT_FOLDER temp_dir: {context.temp_dir.name}  exists = {Path(context.temp_dir.name).exists()}")
+    print(f"SET_PROJECT_FOLDER project_name: {context.project_name}")
+
+    # print(f"set_project_folder: DBT_TARGET_PATH before")
     os.environ["DBT_TARGET_PATH"] = target_path(context)
 
 
@@ -121,11 +144,11 @@ def _load_dbt_result_file(context):
     o = Path(os.path.join(target_path(context), "run_results.json"))
     print(f"_load_dbt_result_file {o} exists: {o.exists()}")
 
-    for parent in list(o.parents)[:2]:
-        print(f"_load_dbt_result_file: Searching from parent {parent}")
-
-        for f in parent.glob("**/run_results.json"):
-            print(f"_load_dbt_result_file: Found: {f}")
+    # for parent in list(o.parents)[:2]:
+    #     print(f"_load_dbt_result_file: Searching from parent {parent}")
+    #
+    #     for f in parent.glob("**/run_results.json"):
+    #         print(f"_load_dbt_result_file: Found: {f}")
 
     # END DEBUG
 
