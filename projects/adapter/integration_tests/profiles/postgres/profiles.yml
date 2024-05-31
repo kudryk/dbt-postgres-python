@@ -7,13 +7,6 @@ fal_test:
     staging:
       type: fal
       db_profile: db
-    # TODO: delete prod target
-    prod:
-      type: fal
-      db_profile: db
-      host: "{{ env_var('FAL_HOST') }}"
-      key_secret: "{{ env_var('FAL_KEY_SECRET') }}"
-      key_id: "{{ env_var('FAL_KEY_ID') }}"
     db:
       type: postgres
       host: localhost
