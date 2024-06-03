@@ -194,7 +194,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup local fal
         uses: ./.github/actions/setup-local-fal
