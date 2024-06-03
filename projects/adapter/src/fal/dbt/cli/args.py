@@ -204,12 +204,12 @@ def _build_flow_parser(sub: argparse.ArgumentParser):
 
 def _build_cli_parser():
     parser = argparse.ArgumentParser(
-        prog="dbt-fal",
+        prog="dbt-postgres-python",
         description="Run Python scripts on dbt models",
     )
 
     try:
-        version = pkg_resources.get_distribution("dbt-fal").version
+        version = pkg_resources.get_distribution("dbt-postgres-python").version
     except pkg_resources.DistributionNotFound:
         # TODO: remove once `fal` is no longer a supported package
         version = pkg_resources.get_distribution("fal").version
