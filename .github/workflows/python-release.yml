@@ -8,10 +8,10 @@ on:
       package:
         description: Package
         required: false
-        default: dbt-fal
+        default: dbt-postgres-python
         type: choice
         options:
-          - dbt-fal
+          - dbt-postgres-python
 
       version:
         description: Version
@@ -38,17 +38,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.8"
 
       - name: Package setup
         run: |
-          if [[ ${{ inputs.package }} == dbt-fal ]]
+          if [[ ${{ inputs.package }} == dbt-postgres-python ]]
           then
             echo "PACKAGE_DIR=projects/adapter" >> $GITHUB_ENV
             echo "TAG_PREFIX=adapter-v" >> $GITHUB_ENV
@@ -127,7 +127,7 @@ jobs:
         env:
           PYPI_USERNAME: ${{ secrets.PYPI_USER }}
           PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: poetry publish -u $PYPI_USERNAME -p $PYPI_PASSWORD -v -n
+        run: poetry publish -r test-pypi -u $PYPI_USERNAME -p $PYPI_PASSWORD -v -n
 
       - name: Clear the repo untracked files
         run: git clean -fxd
@@ -147,7 +147,7 @@ jobs:
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v4
-        if: inputs.package == 'dbt-fal'
+        if: inputs.package == 'dbt-postgres-python'
         with:
           branch: bump-${{ inputs.package }}-${{ env.publishing_version }}
           delete-branch: true
