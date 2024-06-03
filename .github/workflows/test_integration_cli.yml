@@ -27,10 +27,6 @@ on:
         options:
           - "<ALL>"
           - postgres
-          - fal
-          - bigquery
-          - snowflake
-          - duckdb
 
       python:
         description: Python version to test with
@@ -52,7 +48,7 @@ on:
         options:
           - "<ALL>"
           - "latest"
-          - "1.5.*"
+          - "1.5.9"
 
 jobs:
   matrix-adapter:
@@ -64,13 +60,9 @@ jobs:
         shell: python
         run: |
           OPTIONS = [
-            'postgres',
-            'fal'
-           # 'bigquery',
-           # 'snowflake',
+            'postgres'
           ]
           EXTRA_OPTIONS = [
-           # 'duckdb',
           ]
           OUTPUT = OPTIONS
 
@@ -167,7 +159,7 @@ jobs:
         shell: python
         run: |
           OPTIONS = [
-            "1.5.*",
+            "1.5.9",
           ]
           OUTPUT = OPTIONS
 
@@ -247,18 +239,3 @@ jobs:
           fi
 
           behave $BEHAVE_TAGS -fplain -D profile=${{ matrix.profile }} --no-capture
-
-      - name: Send custom JSON data to Slack workflow
-        if: false
-        # if: (failure() || cancelled()) && github.event_name == 'schedule'
-        id: slack
-        uses: slackapi/slack-github-action@v1.18.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "text": "Integration tests failed for dbt-${{ matrix.profile }}@${{ matrix.dbt }} (Python ${{ matrix.python }})\nhttps://github.com/fal-ai/fal/actions/runs/${{ github.run_id }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK

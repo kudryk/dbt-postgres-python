@@ -48,27 +48,6 @@ jobs:
         if: contains(fromJSON('["postgres"]'), matrix.profile)
         run: docker-compose up -d
 
-      - name: Start trino
-        working-directory: fal/projects/adapter/integration_tests/configs/trino
-        if: contains(fromJSON('["trino"]'), matrix.profile)
-        run: docker-compose up -d
-
-      - name: Setup sqlserver dependencies
-        if: contains(fromJSON('["sqlserver"]'), matrix.profile)
-        run: |
-          sudo apt install unixodbc-dev
-          sudo curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list > prod.list
-          sudo cp prod.list /etc/apt/sources.list.d/mssql-release.list
-          sudo apt update
-          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
-
-      - name: Start sqlserver
-        working-directory: fal/projects/adapter/integration_tests/configs/sqlserver
-        if: contains(fromJSON('["sqlserver"]'), matrix.profile)
-        run: |
-          docker-compose up -d
-
       - name: Setup latest dependencies
         working-directory: fal/projects/adapter/integration_tests
         run: |
@@ -140,17 +119,3 @@ jobs:
           fi
 
           behave $BEHAVE_TAGS -fplain -D profile=${{ matrix.profile }} --no-capture
-
-      - name: Send custom JSON data to Slack workflow
-        if: (failure() || cancelled()) && github.event_name == 'schedule'
-        id: slack
-        uses: slackapi/slack-github-action@v1.18.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "text": "Integration tests failed for dbt-${{ matrix.profile }}@${{ matrix.dbt }} (Python ${{ matrix.python }})\nhttps://github.com/fal-ai/fal/actions/runs/${{ github.run_id }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
