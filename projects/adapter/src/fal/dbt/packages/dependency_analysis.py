@@ -42,7 +42,7 @@ def _get_dbt_packages() -> Iterator[Tuple[str, Optional[str]]]:
             continue
 
         # Skip dbt-fal since it is already handled by _get_dbt_fal_package_name
-        if dbt_plugin_name == "dbt-fal":
+        if dbt_plugin_name == "dbt-postgres-python":
             continue
 
         yield dbt_plugin_name, distribution.version
@@ -82,7 +82,7 @@ def _find_fal_extras(package: str) -> set[str]:
     return available_dbt_adapters.intersection(all_extras)
 
 def _running_pre_release() -> bool:
-    raw_fal_version = importlib_metadata.version("dbt-fal")
+    raw_fal_version = importlib_metadata.version("dbt-postgres-python")
     return _version_is_prerelease(raw_fal_version)
 
 def _version_is_prerelease(raw_version: str) -> bool:
@@ -100,22 +100,22 @@ def _get_dbt_fal_package() -> Tuple[str, Optional[str]]:
             dbt_fal_version = None
         else:
             # We are going to install it from PyPI.
-            dbt_fal_dep = "dbt-fal"
+            dbt_fal_dep = "dbt-postgres-python"
             try:
-                dbt_fal_version = importlib_metadata.version("dbt-fal")
+                dbt_fal_version = importlib_metadata.version("dbt-postgres-python")
             except importlib_metadata.PackageNotFoundError:
                 # TODO: remove once `fal` is no longer a supported package
                 dbt_fal_version = importlib_metadata.version("fal")
     else:
-        dbt_fal_dep = "dbt-fal"
+        dbt_fal_dep = "dbt-postgres-python"
         try:
-            dbt_fal_version = importlib_metadata.version("dbt-fal")
+            dbt_fal_version = importlib_metadata.version("dbt-postgres-python")
         except importlib_metadata.PackageNotFoundError:
             # TODO: remove once `fal` is no longer a supported package
             dbt_fal_version = importlib_metadata.version("fal")
 
     try:
-        dbt_fal_extras = _find_fal_extras("dbt-fal")
+        dbt_fal_extras = _find_fal_extras("dbt-postgres-python")
     except importlib_metadata.PackageNotFoundError:
         # TODO: remove once `fal` is no longer a supported package
         dbt_fal_extras = _find_fal_extras("fal")
