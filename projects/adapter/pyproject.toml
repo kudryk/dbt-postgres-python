@@ -1,13 +1,13 @@
 [tool.poetry]
-name = "dbt-fal"
-version = "1.5.9a0"
+name = "dbt-postgres-python"
+version = "1.5.9a1"
 # name = "fal"
 # version = "0.9.4a0"
-description = "Run python scripts from any dbt project."
+description = "Run python scripts from any dbt project. This project is based on the project https://github.com/fal-ai/fal initially authored by FAL.AI."
 readme = "README.md"
-homepage = "https://github.com/fal-ai/fal"
-repository = "https://github.com/fal-ai/fal"
-authors = [ "Features & Labels <hello@fal.ai>" ]
+homepage = "https://github.com/kudryk/dbt-postgres-python"
+repository = "https://github.com/kudryk/dbt-postgres-python"
+authors = [ "Features & Labels <hello@fal.ai>", "Mark Kudryk <kudryk@me.com>" ]
 packages = [
     { include = "dbt", from = "src" },
     # cli package
@@ -96,4 +96,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-dbt-fal = "fal.dbt.cli:cli"
+dbt-postgres-python = "fal.dbt.cli:cli"
