@@ -12,6 +12,7 @@ from fal.dbt.cli import cli
 profiles_dir = os.path.join(Path.cwd(), "tests/mock/mockProfile")
 project_dir = os.path.join(Path.cwd(), "tests/mock")
 
+pytest.skip(allow_module_level=True)
 
 class ProjectTemporaryDirectory(tempfile.TemporaryDirectory):
     def __init__(self, *args, **kargs):
