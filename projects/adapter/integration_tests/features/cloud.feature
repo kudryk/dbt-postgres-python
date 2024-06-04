@@ -1,3 +1,4 @@
+@skip  # FAL Cloud is not supported
 @cloud
 Feature: isolate cloud
   Background: Project Setup

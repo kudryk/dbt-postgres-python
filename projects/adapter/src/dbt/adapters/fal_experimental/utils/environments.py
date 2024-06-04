@@ -220,12 +220,12 @@ def _get_dbt_packages(
         yield dbt_plugin_name, distribution.version
 
     try:
-        dbt_fal_version = importlib_metadata.version("dbt-fal")
+        dbt_fal_version = importlib_metadata.version("dbt-postgres-python")
     except importlib_metadata.PackageNotFoundError:
         # It might not be installed.
         return None
 
-    dbt_fal_dep = "dbt-fal"
+    dbt_fal_dep = "dbt-postgres-python"
     dbt_fal_extras = _find_adapter_extras(dbt_fal_dep, dbt_adapter)
     if is_teleport:
         dbt_fal_extras.add("teleport")

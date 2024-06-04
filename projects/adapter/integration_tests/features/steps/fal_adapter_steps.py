@@ -115,6 +115,20 @@ def _get_dated_dbt_models(context):
 
 
 def _load_dbt_result_file(context):
+
+    # DEBUG
+    # from pathlib import Path
+    # o = Path(os.path.join(target_path(context), "run_results.json"))
+    # print(f"_load_dbt_result_file {o} exists: {o.exists()}")
+    #
+    # for parent in list(o.parents)[:2]:
+    #     print(f"_load_dbt_result_file: Searching from parent {parent}")
+    #
+    #     for f in parent.glob("**/run_results.json"):
+    #         print(f"_load_dbt_result_file: Found: {f}")
+
+    # END DEBUG
+
     with open(os.path.join(target_path(context), "run_results.json")) as stream:
         return json.load(stream)["results"]
 

@@ -120,7 +120,7 @@ def get_dbt_adapter_type(config: RuntimeConfig) -> str:
 def fal_installed_version():
     """Returns: fal version"""
     try:
-        return pkg_resources.get_distribution("dbt-fal").version
+        return pkg_resources.get_distribution("dbt-postgres-python").version
     except pkg_resources.DistributionNotFound:
         return
 
@@ -267,7 +267,7 @@ def log_api(
     str_param(action)
 
     props = {
-        "tool": "dbt-fal",
+        "tool": "dbt-postgres-python",
         "config_hash": config_hash,
         "event_id": str(event_id),
         "invocation_id": str(invocation_id),

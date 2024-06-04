@@ -3,7 +3,6 @@ import os
 import shlex
 from typing import List, Optional
 from behave import *
-import glob
 from fal.dbt.cli import cli
 import tempfile
 import json
@@ -67,9 +66,7 @@ def set_project_folder(context, project: str):
     context.temp_dir = tempfile.TemporaryDirectory()
     os.environ["project_dir"] = context.base_dir
     os.environ["temp_dir"] = context.temp_dir.name
-
-    # TODO: re-enable when the issue https://github.com/dbt-labs/dbt-core/issues/7465 is fixed
-    # os.environ["DBT_TARGET_PATH"] = target_path(context)
+    os.environ["DBT_TARGET_PATH"] = target_path(context)
 
 
 @when("the data is seeded")
@@ -390,6 +387,10 @@ def _get_dated_fal_artifacts(context, *kinds):
 
 
 def _load_dbt_result_file(context):
+
+    temp = target_path(context, "run_results.json")
+    print(f"RUN_RESULTS location is {temp}")
+
     with open(
         target_path(context, "run_results.json")
     ) as stream:

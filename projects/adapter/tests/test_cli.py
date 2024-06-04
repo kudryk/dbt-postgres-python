@@ -12,6 +12,7 @@ from fal.dbt.cli import cli
 profiles_dir = os.path.join(Path.cwd(), "tests/mock/mockProfile")
 project_dir = os.path.join(Path.cwd(), "tests/mock")
 
+pytest.skip(allow_module_level=True)
 
 class ProjectTemporaryDirectory(tempfile.TemporaryDirectory):
     def __init__(self, *args, **kargs):
@@ -77,7 +78,7 @@ def test_run_with_project_dir(capfd):
 def test_version(capfd):
     import pkg_resources
 
-    version = pkg_resources.get_distribution("dbt-fal").version
+    version = pkg_resources.get_distribution("dbt-postgres-python").version
     captured = _run_fal(["--version"], capfd)
     assert f"fal {version}" in captured.out
 

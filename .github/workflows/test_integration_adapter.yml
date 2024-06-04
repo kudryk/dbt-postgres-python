@@ -26,32 +26,20 @@ jobs:
       matrix:
         profile:
           - postgres
-          - bigquery
-          - snowflake
-          # TODO: enable as 1.5 becomes available for following adapters
-          # - trino
-          # - duckdb
-          # - sqlserver
         dbt_version:
-          - "1.5.0"
+          - "1.5.9"
         python:
           - "3.8"
           - "3.9"
           - "3.10"
-          # - "3.11"
-        include:
-          - profile: snowflake
-            teleport: true
-            cloud: true
-          - profile: bigquery
-            cloud: true
+          - "3.11"
 
     concurrency:
       group: "${{ github.head_ref || github.run_id }}-${{ github.workflow }}-${{ matrix.profile }}-${{ matrix.python }}"
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           path: "fal"
 
@@ -59,27 +47,6 @@ jobs:
         working-directory: fal/projects/adapter/cli_tests
         if: contains(fromJSON('["postgres"]'), matrix.profile)
         run: docker-compose up -d
-
-      - name: Start trino
-        working-directory: fal/projects/adapter/integration_tests/configs/trino
-        if: contains(fromJSON('["trino"]'), matrix.profile)
-        run: docker-compose up -d
-
-      - name: Setup sqlserver dependencies
-        if: contains(fromJSON('["sqlserver"]'), matrix.profile)
-        run: |
-          sudo apt install unixodbc-dev
-          sudo curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list > prod.list
-          sudo cp prod.list /etc/apt/sources.list.d/mssql-release.list
-          sudo apt update
-          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
-
-      - name: Start sqlserver
-        working-directory: fal/projects/adapter/integration_tests/configs/sqlserver
-        if: contains(fromJSON('["sqlserver"]'), matrix.profile)
-        run: |
-          docker-compose up -d
 
       - name: Setup latest dependencies
         working-directory: fal/projects/adapter/integration_tests
@@ -123,56 +90,10 @@ jobs:
         working-directory: fal/projects/adapter/integration_tests
         env:
           FAL_STATS_ENABLED: false
-          # Teleport
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # Isolate Cloud
-          FAL_HOST: ${{ secrets.FAL_HOST }}
-          FAL_KEY_SECRET: ${{ secrets.FAL_KEY_SECRET }}
-          FAL_KEY_ID: ${{ secrets.FAL_KEY_ID }}
-          # BigQuery
-          KEYFILE: ${{ secrets.GCP_SA_KEY }}
-          GCLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-          BQ_DATASET: ${{ secrets.BQ_DATASET }}
-          # Snowflake
-          SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-          SF_USER: ${{ secrets.SF_USER }}
-          SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
-          SF_ROLE: ${{ secrets.SF_ROLE }}
-          SF_DATABASE: ${{ secrets.SF_DATABASE }}
-          SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-          SF_SCHEMA: ${{ secrets.SF_SCHEMA }}
-          # Duckdb
-          DB_PATH: ${{ github.workspace }}/duck.db
         run: |
           source .venv/bin/activate
 
           # Database and schema setup for sources
-          if [[ '${{ matrix.profile }}' == "bigquery" ]]
-          then
-            export DBT_DATABASE="$GCLOUD_PROJECT" DBT_SCHEMA="$BQ_DATASET"
-          fi
-          if [[ '${{ matrix.profile }}' == "snowflake" ]]
-          then
-            export DBT_DATABASE="$SF_DATABASE" DBT_SCHEMA="$SF_SCHEMA"
-          fi
-          if [[ '${{ matrix.profile }}' == "duckdb" ]]
-          then
-            # TODO: which to use for sources? Example:
-            #   database: "{{ env_var('DBT_DATABASE', 'test') }}"
-            #   schema: "{{ env_var('DBT_SCHEMA', 'dbt_fal') }}"
-            export DBT_DATABASE="" DBT_SCHEMA=""
-          fi
-
-          if [[ '${{ matrix.profile }}' == "bigquery" ]]
-          then
-            export GCLOUD_PRIVATE_KEY_ID=$(echo $KEYFILE | jq '.private_key_id' | tr -d '"')
-            export RAW_PRIVATE_KEY=$(echo $KEYFILE | jq '.private_key' | tr -d '"')
-            export GCLOUD_PRIVATE_KEY="${RAW_PRIVATE_KEY//'\n'/$'\n'}"
-            export GCLOUD_CLIENT_EMAIL=$(echo $KEYFILE | jq '.client_email' | tr -d '"')
-            export GCLOUD_CLIENT_ID=$(echo $KEYFILE | jq '.client_id' | tr -d '"')
-            export GCLOUD_X509_CERT_URL=$(echo $KEYFILE | jq '.client_x509_cert_url' | tr -d '"')
-          fi
 
           # Could not get the real job_id easily from context
           UUID=$(uuidgen | head -c8)
@@ -197,18 +118,4 @@ jobs:
             export FAL_GITHUB_BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
           fi
 
-          behave $BEHAVE_TAGS -fplain -D profile=${{ matrix.profile }}
-
-      - name: Send custom JSON data to Slack workflow
-        if: (failure() || cancelled()) && github.event_name == 'schedule'
-        id: slack
-        uses: slackapi/slack-github-action@v1.18.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "text": "Integration tests failed for dbt-${{ matrix.profile }}@${{ matrix.dbt }} (Python ${{ matrix.python }})\nhttps://github.com/fal-ai/fal/actions/runs/${{ github.run_id }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          behave $BEHAVE_TAGS -fplain -D profile=${{ matrix.profile }} --no-capture

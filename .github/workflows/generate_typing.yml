@@ -17,12 +17,12 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.head_ref }}
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         with:
           python-version: 3.9
 
@@ -33,8 +33,7 @@ jobs:
         run: |
           python tools/generate_typing_context.py
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: Generate typing
-          commit_user_email: hello@fal.ai
-          commit_user_name: Fal Bot
+          commit_user_email: kudryk@me.com

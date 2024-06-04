@@ -27,10 +27,6 @@ on:
         options:
           - "<ALL>"
           - postgres
-          - bigquery
-          - snowflake
-          - duckdb
-          - fal
 
       python:
         description: Python version to test with
@@ -52,7 +48,7 @@ on:
         options:
           - "<ALL>"
           - "latest"
-          - "1.5.*"
+          - "1.5.9"
 
 jobs:
   matrix-adapter:
@@ -64,13 +60,9 @@ jobs:
         shell: python
         run: |
           OPTIONS = [
-            'postgres',
-            'bigquery',
-            'snowflake',
-            'fal'
+            'postgres'
           ]
           EXTRA_OPTIONS = [
-            'duckdb',
           ]
           OUTPUT = OPTIONS
 
@@ -103,7 +95,9 @@ jobs:
               OUTPUT = [INPUT_CHOICE]
 
           import json
-          print("::set-output name=list::" + json.dumps(OUTPUT))
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output_fp:
+              print(f'list={json.dumps(OUTPUT)}', file=output_fp)
 
   matrix-python:
     runs-on: ubuntu-latest
@@ -152,7 +146,9 @@ jobs:
               OUTPUT = [INPUT_CHOICE]
 
           import json
-          print("::set-output name=list::" + json.dumps(OUTPUT))
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output_fp:
+              print(f'list={json.dumps(OUTPUT)}', file=output_fp)
 
   matrix-dbt:
     runs-on: ubuntu-latest
@@ -163,7 +159,7 @@ jobs:
         shell: python
         run: |
           OPTIONS = [
-            "1.5.*",
+            "1.5.9",
           ]
           OUTPUT = OPTIONS
 
@@ -175,7 +171,9 @@ jobs:
               OUTPUT = [INPUT_CHOICE]
 
           import json
-          print("::set-output name=list::" + json.dumps(OUTPUT))
+          import os
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output_fp:
+              print(f'list={json.dumps(OUTPUT)}', file=output_fp)
 
   run:
     needs:
@@ -196,7 +194,7 @@ jobs:
       cancel-in-progress: true
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup local fal
         uses: ./.github/actions/setup-local-fal
@@ -227,46 +225,7 @@ jobs:
         working-directory: projects/adapter/cli_tests
         env:
           FAL_STATS_ENABLED: false
-          # BigQuery
-          KEYFILE: ${{ secrets.GCP_SA_KEY }}
-          GCLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
-          BQ_DATASET: ${{ secrets.BQ_DATASET }}
-          # Snowflake
-          SF_ACCOUNT: ${{ secrets.SF_ACCOUNT }}
-          SF_USER: ${{ secrets.SF_USER }}
-          SF_PASSWORD: ${{ secrets.SF_PASSWORD }}
-          SF_ROLE: ${{ secrets.SF_ROLE }}
-          SF_DATABASE: ${{ secrets.SF_DATABASE }}
-          SF_WAREHOUSE: ${{ secrets.SF_WAREHOUSE }}
-          SF_SCHEMA: ${{ secrets.SF_SCHEMA }}
-          # Duckdb
-          DB_PATH: ${{ github.workspace }}/duck.db
         run: |
-          # Database and schema setup for sources
-          if [[ '${{ matrix.profile }}' == "bigquery" ]]
-          then
-            export DBT_DATABASE="$GCLOUD_PROJECT" DBT_SCHEMA="$BQ_DATASET"
-          fi
-          if [[ '${{ matrix.profile }}' == "snowflake" ]]
-          then
-            export DBT_DATABASE="$SF_DATABASE" DBT_SCHEMA="$SF_SCHEMA"
-          fi
-          if [[ '${{ matrix.profile }}' == "duckdb" ]]
-          then
-            # TODO: which to use for sources? Example:
-            #   database: "{{ env_var('DBT_DATABASE', 'test') }}"
-            #   schema: "{{ env_var('DBT_SCHEMA', 'dbt_fal') }}"
-            export DBT_DATABASE="" DBT_SCHEMA=""
-          fi
-
-          if [[ '${{ matrix.profile }}' == "bigquery" ]]
-          then
-            echo $KEYFILE > $HOME/keyfile.json
-            ls -la $HOME/keyfile.json
-            export KEYFILE_DIR=$HOME
-            echo 'keyfile is ready'
-          fi
-
           # Could not get the real job_id easily from context
           UUID=$(uuidgen | head -c8)
           export DB_NAMESPACE="${{ github.run_id }}_${UUID}"
@@ -279,19 +238,4 @@ jobs:
             BEHAVE_TAGS="$BEHAVE_TAGS --tags=-broken_profile"
           fi
 
-          behave $BEHAVE_TAGS -fplain -D profile=${{ matrix.profile }}
-
-      - name: Send custom JSON data to Slack workflow
-        if: false
-        # if: (failure() || cancelled()) && github.event_name == 'schedule'
-        id: slack
-        uses: slackapi/slack-github-action@v1.18.0
-        with:
-          # For posting a rich message using Block Kit
-          payload: |
-            {
-              "text": "Integration tests failed for dbt-${{ matrix.profile }}@${{ matrix.dbt }} (Python ${{ matrix.python }})\nhttps://github.com/fal-ai/fal/actions/runs/${{ github.run_id }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+          behave $BEHAVE_TAGS -fplain -D profile=${{ matrix.profile }} --no-capture

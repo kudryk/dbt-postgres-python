@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from fal.dbt.fal_script import Context, CurrentModel
 
     class _List_Sources(Protocol):
+
         def __call__(self) -> List[DbtSource]:
             """
             List tables available for `source` usage
@@ -18,6 +19,7 @@ if TYPE_CHECKING:
             ...
 
     class _List_Models_Ids(Protocol):
+
         def __call__(self) -> Dict[str, str]:
             """
             List model ids available for `ref` usage, formatting like `[ref_name, ...]`
@@ -25,6 +27,7 @@ if TYPE_CHECKING:
             ...
 
     class _List_Models(Protocol):
+
         def __call__(self) -> List[DbtModel]:
             """
             List models
@@ -32,6 +35,7 @@ if TYPE_CHECKING:
             ...
 
     class _List_Tests(Protocol):
+
         def __call__(self) -> List[DbtTest]:
             """
             List tests
@@ -39,10 +43,10 @@ if TYPE_CHECKING:
             ...
 
     class _List_Features(Protocol):
-        def __call__(self) -> List[Feature]:
-            ...
 
+        def __call__(self) -> List[Feature]: ...
     class _Ref(Protocol):
+
         def __call__(
             self, target_1: str, target_2: Optional[str] = None
         ) -> pd.DataFrame:
@@ -52,6 +56,7 @@ if TYPE_CHECKING:
             ...
 
     class _Source(Protocol):
+
         def __call__(
             self, target_source_name: str, target_table_name: str
         ) -> pd.DataFrame:
@@ -61,6 +66,7 @@ if TYPE_CHECKING:
             ...
 
     class _Write_To_Source(Protocol):
+
         def __call__(
             self,
             data: pd.DataFrame,
@@ -76,6 +82,7 @@ if TYPE_CHECKING:
             ...
 
     class _Execute_Sql(Protocol):
+
         def __call__(self, sql: str) -> pd.DataFrame:
             """Execute a sql query."""
             ...
