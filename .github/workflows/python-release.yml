@@ -36,6 +36,9 @@ jobs:
     if: github.ref == 'refs/heads/release' || inputs.publish_from_any_branch
 
     runs-on: ubuntu-latest
+    # Needed for PyPI
+    permissions:
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
@@ -120,9 +123,10 @@ jobs:
             ${{ env.PACKAGE_DIR }}/dist/${{ inputs.package }}-${{ env.publishing_version }}.tar.gz
 
       - name: Publish PyPI
-        working-directory: ${{ env.PACKAGE_DIR }}
-        run: |
-          poetry publish -r test-pypi -v -n
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: ${{ env.PACKAGE_DIR }}
+          repository-url: https://test.pypi.org/legacy/
 
       - name: Clear the repo untracked files
         run: git clean -fxd
