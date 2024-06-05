@@ -36,9 +36,9 @@ jobs:
     if: github.ref == 'refs/heads/release' || inputs.publish_from_any_branch
 
     runs-on: ubuntu-latest
-    # Needed for PyPI
-#    permissions:
-#      id-token: write
+    permissions:
+      contents: write
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
