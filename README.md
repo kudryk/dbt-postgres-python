@@ -1,54 +1,21 @@
-# dbt-fal: do more with dbt
+# dbt-postgres-python: do more with dbt
 
-dbt-fal is the easiest way to run Python with your [dbt](https://www.getdbt.com/) project.
-
-<p align="center">
-  <a href="https://fal.ai">
-    <img src="https://badgen.net/badge/icon/Sign%20up%20for%20fal%20Serverless/purple?icon=terminal&label" alt="fal Serverless" />
-  </a>&nbsp;
-  <a href="https://pepy.tech/project/dbt-fal">
-    <img src="https://static.pepy.tech/personalized-badge/dbt-fal?period=total&units=international_system&left_color=grey&right_color=blue&left_text=Downloads" alt="Total downloads" />
-  </a>&nbsp;
-  <a href="https://pypi.org/project/dbt-fal/">
-    <img src="https://badge.fury.io/py/dbt-fal.svg" alt="dbt-fal on PyPI" />
-  </a>&nbsp;
-  <a href="https://getdbt.slack.com/archives/C02V8QW3Q4Q">
-    <img src="https://badgen.net/badge/icon/%23tools-fal%20on%20dbt%20Slack/orange?icon=slack&label" alt="Slack channel" />
-  </a>&nbsp;
-  <a href="https://discord.com/invite/Fyc9PwrccF">
-    <img src="https://badgen.net/badge/icon/Join%20us%20on%20Discord/red?icon=discord&label" alt="Discord conversation" />
-  </a>
-</p>
+dbt-postgres-python is the easiest way to run Python with your [dbt](https://www.getdbt.com/) project.
 
 # Introduction - 📖 [README](./projects/adapter)
 
-The dbt-fal ecosystem has two main components: The command line and the adapter.
-
-## CLI
-
-With the CLI, you can:
-
-- [Send Slack notifications](https://github.com/fal-ai/fal/tree/main/examples/slack-example) upon dbt model success or failure.
-- [Load data from external data sources](https://blog.fal.ai/populate-dbt-models-with-csv-data/) before a model starts running.
-- [Download dbt models](https://docs.fal.ai/fal/python-package) into a Python context with a familiar syntax: `ref('my_dbt_model')` using `FalDbt`
-- [Programatically access rich metadata](https://docs.fal.ai/fal/reference/variables-and-functions) about your dbt project.
+dbt-postgres-python is only supporting the adapter originally developed by
+[dbt-fal](https://github.com/fal-ai/dbt-fal) going forward (i.e. CLI will be dropped) and only for Postgres.
 
 ## Python Adapter
 
 With the Python adapter, you can:
 
-- Enable a developer-friendly Python environment for most databases, including ones without dbt Python support such as Redshift, Postgres.
+- Enable a developer-friendly Python environment for Postgres.
 - Use Python libraries such as [`sklearn`](https://scikit-learn.org/) or [`prophet`](https://facebook.github.io/prophet/) to build more complex `dbt` models including ML models.
-- Easily manage your Python environments with [`isolate`](https://github.com/fal-ai/isolate).
-- Iterate on your Python models locally and then [scale them out in the cloud](https://fal.ai#signup).
 
-# Why are we building this?
+# Why are continuing to maintain this?
 
-We think `dbt` is great because it empowers data people to get more done with the tools that they are already familiar with.
-
-This library will form the basis of our attempt to more comprehensively enable **data science workloads** downstream of `dbt`. And because having reliable data pipelines is the most important ingredient in building predictive analytics, we are building a library that integrates well with dbt.
-
-# Have feedback or need help?
-
-- Join us in [fal on Discord](https://discord.com/invite/Fyc9PwrccF)
-- Join the [dbt Community](http://community.getdbt.com/) and go into our [#tools-fal channel](https://getdbt.slack.com/archives/C02V8QW3Q4Q)
+My work team has been using `dbt-fal` and have found it very useful. The [FAL](https://github.com/fal-ai) team in
+April, 2024 chose to stop maintaining `dbt-fal` -- thank you very much for starting this effort. I've decided to pick it
+up to try to keep it current with DBT itself, but only for the functionality my team needs.
