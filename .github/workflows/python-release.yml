@@ -93,30 +93,30 @@ jobs:
           PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: poetry build
 
-      - name: Generate a changelog
-        uses: orhun/git-cliff-action@v1.1.7
-        id: git-cliff
-        with:
-          config: ${{ env.PACKAGE_DIR }}/cliff.toml
-          args: ${{ env.prev_version_tag }}..${{ github.ref }}
-        env:
-          OUTPUT: CHANGES.md
+#      - name: Generate a changelog
+#        uses: orhun/git-cliff-action@v1.1.7
+#        id: git-cliff
+#        with:
+#          config: ${{ env.PACKAGE_DIR }}/cliff.toml
+#          args: ${{ env.prev_version_tag }}..${{ github.ref }}
+#        env:
+#          OUTPUT: CHANGES.md
 
-      - name: Set the release body
-        id: release
-        shell: bash
-        run: |
-          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
-          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
-          r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
-          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
-          echo "::set-output name=RELEASE_BODY::$r"
+#      - name: Set the release body
+#        id: release
+#        shell: bash
+#        run: |
+#          r=$(cat ${{ steps.git-cliff.outputs.changelog }})
+#          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
+#          r="${r//$'\n'/'%0A'}"   # Multiline escape sequences for '\n'
+#          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
+#          echo "::set-output name=RELEASE_BODY::$r"
 
       - name: Publish GitHub
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ inputs.package }} ${{ env.publishing_version }}
-          body: ${{ steps.release.outputs.RELEASE_BODY }}
+          # body: ${{ steps.release.outputs.RELEASE_BODY }}
           tag_name: ${{ env.TAG_PREFIX }}${{ env.publishing_version }}
           files: |
             ${{ env.PACKAGE_DIR }}/dist/${{ inputs.package }}-${{ env.publishing_version }}-py3-none-any.whl
@@ -156,4 +156,4 @@ jobs:
           title: Bump the pyproject.toml ${{ inputs.package }} version
           base: main
           token: ${{ secrets.RELEASER_GITHUB_PAT }}
-          body: ${{ steps.release.outputs.RELEASE_BODY }}
+          # body: ${{ steps.release.outputs.RELEASE_BODY }}

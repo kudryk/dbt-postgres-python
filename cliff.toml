@@ -25,7 +25,7 @@ conventional_commits = true
 filter_unconventional = true
 # regex for preprocessing the commit messages
 commit_preprocessors = [
-    { pattern = '\((\w+\s)?#([0-9]+)\)', replace = "([#${2}](https://github.com/fal-ai/fal/pull/${2}))"},
+    { pattern = '\((\w+\s)?#([0-9]+)\)', replace = "([#${2}](https://github.com/kudryk/dbt-postgres-python/pull/${2}))"},
 ]
 # regex for parsing and grouping commits
 commit_parsers = [
