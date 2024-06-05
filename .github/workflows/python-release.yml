@@ -88,9 +88,6 @@ jobs:
       - name: Build package
         working-directory: ${{ env.PACKAGE_DIR }}
         shell: bash
-        env:
-          PYPI_USERNAME: ${{ secrets.PYPI_USER }}
-          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: poetry build
 
       - name: Generate a changelog
