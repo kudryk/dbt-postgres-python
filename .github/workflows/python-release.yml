@@ -125,7 +125,7 @@ jobs:
       - name: Publish PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: ${{ env.PACKAGE_DIR }}
+          packages-dir: ${{ env.PACKAGE_DIR }}/dist/
           repository-url: https://test.pypi.org/legacy/
 
       - name: Clear the repo untracked files
