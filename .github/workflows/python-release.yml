@@ -122,7 +122,6 @@ jobs:
       - name: Publish PyPI
         working-directory: ${{ env.PACKAGE_DIR }}
         run: |
-          poetry config repositories.test-pypi https://test.pypi.org/legacy/
           poetry publish -r test-pypi -v -n
 
       - name: Clear the repo untracked files
