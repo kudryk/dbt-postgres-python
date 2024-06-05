@@ -124,12 +124,9 @@ jobs:
 
       - name: Publish PyPI
         working-directory: ${{ env.PACKAGE_DIR }}
-        env:
-          PYPI_USERNAME: ${{ secrets.PYPI_USER }}
-          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
         run: |
           poetry config repositories.test-pypi https://test.pypi.org/legacy/
-          poetry publish -r test-pypi -u $PYPI_USERNAME -p $PYPI_PASSWORD -v -n
+          poetry publish -r test-pypi -v -n
 
       - name: Clear the repo untracked files
         run: git clean -fxd
