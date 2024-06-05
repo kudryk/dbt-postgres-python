@@ -107,6 +107,8 @@ jobs:
         shell: bash
         run: |
           r=$(cat ${{ steps.git-cliff.outputs.changelog }})
+          r="${r//'%'/'%25'}"     # Multiline escape sequences for %
+          r="${r//$'\r'/'%0D'}"   # Multiline escape sequences for '\r'
           echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT
 
       - name: Publish GitHub
