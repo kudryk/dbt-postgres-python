@@ -1,8 +1,6 @@
 [tool.poetry]
 name = "dbt-postgres-python"
-version = "1.5.9a1"
-# name = "fal"
-# version = "0.9.4a0"
+version = "1.6.16a0"
 description = "Run python scripts from any dbt project. This project is based on the project https://github.com/fal-ai/fal initially authored by FAL.AI."
 readme = "README.md"
 homepage = "https://github.com/kudryk/dbt-postgres-python"
@@ -19,19 +17,19 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-dbt-core = ">=1.5,<=1.5.9"
-pandas = "^1.3.4"
-posthog = "^1.4.5"
-"backports.functools_lru_cache" = "^1.6.4"
+dbt-core = ">=1.6,<=1.6.16"
+pandas = "^1.5.3"
+posthog = "^1.4.9"
+"backports.functools_lru_cache" = "^1.6.6"
 
 ## Environment management related dependencies
 ## TODO use fal-serverless instead
-platformdirs = "^2.5.2"
-virtualenv = "^20.16.2"
+platformdirs = "^2.6.2"
+virtualenv = "^20.21.1"
 dill = "0.3.7"
 
 # dbt-fal
-sqlalchemy = "^1.4.41"
+sqlalchemy = "^1.4.52"
 
 # Adapters
 
@@ -58,7 +56,7 @@ s3fs = { version = ">=2022.8.2", optional = true }
 # fal cloud
 packaging = ">=23"
 fal = "^0.10.0"
-importlib-metadata = "^6.0.0"
+importlib-metadata = "^6.11.0"
 
 [tool.poetry.extras]
 postgres = []
@@ -80,8 +78,8 @@ behave = "^1.2.6"
 mock = "^4.0.3"
 pytest-mock = "^3.7.0"
 matplotlib = "^3.5.2"
-requests = "^2.27.1"
+requests = "^2.32.3"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.5.0"]
 build-backend = "poetry.core.masonry.api"
