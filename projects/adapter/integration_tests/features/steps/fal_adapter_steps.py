@@ -68,7 +68,7 @@ def set_project_folder(context, project: str):
     context.base_dir = str(project_path)
     context.temp_dir = tempfile.TemporaryDirectory()
     context.project_name = _load_dbt_project_file(context)["name"]
-    os.environ["DBT_TARGET_PATH"] = target_path(context)
+    # os.environ["DBT_TARGET_PATH"] = target_path(context)
 
 
 @then("the following models are calculated in order")
