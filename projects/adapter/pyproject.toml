@@ -1,8 +1,6 @@
 [tool.poetry]
 name = "dbt-postgres-python"
-version = "1.5.9a1"
-# name = "fal"
-# version = "0.9.4a0"
+version = "1.6.16a0"
 description = "Run python scripts from any dbt project. This project is based on the project https://github.com/fal-ai/fal initially authored by FAL.AI."
 readme = "README.md"
 homepage = "https://github.com/kudryk/dbt-postgres-python"
@@ -19,7 +17,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-dbt-core = ">=1.5,<=1.5.9"
+dbt-core = ">=1.6,<=1.6.16"
 pandas = "^1.3.4"
 posthog = "^1.4.5"
 "backports.functools_lru_cache" = "^1.6.4"
