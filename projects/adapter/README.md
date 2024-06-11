@@ -15,10 +15,13 @@ dbt-postgres-python provides the best environment to run your Python models that
 - Build and test your models locally
 - Isolate each model to run in its own environment with its own dependencies
 
+**NB**: This project is based off the archived [dbt-fal](https://github.com/fal-ai/dbt-fal) project, which initially supported other platforms. This project
+will only support the postgres adaptor. Support for the FAL CLI is dropped as well.
+
 ## Getting Started
 
-### 1. Install dbt-postgres
-`pip install dbt-postgres` 
+### 1. Install dbt-postgres-python
+`pip install dbt-postgres-python`
 
 ### 2. Update your `profiles.yml` and add the fal adapter
 
@@ -27,7 +30,7 @@ jaffle_shop:
   target: dev_with_fal
   outputs:
     dev_with_fal:
-      type: fal  # fal type is kept for backwards compatibility
+      type: fal  # "fal" type is kept for backwards compatibility
       db_profile: dev_postgres # This points to your main adapter
     dev_postgres:
       type: postgres
