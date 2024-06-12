@@ -21,9 +21,7 @@ dbt-core = ">=1.7,<=1.7.16"
 pandas = "^1.5.3"
 
 ## Environment management related dependencies
-platformdirs = "^2.6.2"
 virtualenv = "^20.21.1"
-dill = "0.3.7"
 
 # dbt-fal
 sqlalchemy = "^1.4.52"
