@@ -70,11 +70,6 @@ jobs:
             EXTRAS="$EXTRAS,teleport"
           fi
 
-          if [[ '${{ matrix.cloud }}' == 'true' ]]
-          then
-            EXTRAS="$EXTRAS,cloud"
-          fi
-
           DBT_FAL_PACKAGE=".[$EXTRAS]"
 
           echo "pip install $ADAPTER_PACKAGE -e $DBT_FAL_PACKAGE"
@@ -104,11 +99,6 @@ jobs:
           if [[ '${{ matrix.teleport }}' != 'true' ]]
           then
             BEHAVE_TAGS="$BEHAVE_TAGS --tags=-teleport"
-          fi
-
-          if [[ '${{ matrix.cloud }}' != 'true' ]]
-          then
-            BEHAVE_TAGS="$BEHAVE_TAGS --tags=-cloud"
           fi
 
           if [[ -z "${GITHUB_HEAD_REF}" ]]
