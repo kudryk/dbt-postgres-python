@@ -15,13 +15,6 @@ Linear: closes FEA-XXX
 Adapter to test:
 <!-- Add relevant ones -->
 - postgres
-<!--
-- snowflake
-- bigquery
-- redshift
-- duckdb
-- athena
--->
 
 Python version to test:
 <!-- Add relevant ones -->
