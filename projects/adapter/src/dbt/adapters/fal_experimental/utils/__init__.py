@@ -3,10 +3,7 @@ from typing import Any
 
 from dbt.config.runtime import RuntimeConfig
 
-try:
-    from functools import lru_cache
-except ImportError:
-    from backports.functools_lru_cache import lru_cache
+from functools import lru_cache
 
 
 FAL_SCRIPTS_PATH_VAR_NAME = 'fal-scripts-path'
