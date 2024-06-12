@@ -18,3 +18,6 @@ models:
       +post-hook:
         # NOTE: completely ignored for Python models
         - "ALTER TABLE {{ this }} ADD COLUMN my_post_hook text"
+
+flags:
+  send_anonymous_usage_stats: False
