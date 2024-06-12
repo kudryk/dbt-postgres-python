@@ -13,3 +13,6 @@ vars:
 
 models:
   +schema: custom
+
+flags:
+  send_anonymous_usage_stats: False
