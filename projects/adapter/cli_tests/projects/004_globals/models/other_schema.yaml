@@ -1,6 +1,0 @@
-version: 2
-
-fal:
-  scripts:
-    before:
-      - fal_scripts/before_b.py

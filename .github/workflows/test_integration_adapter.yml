@@ -27,7 +27,7 @@ jobs:
         profile:
           - postgres
         dbt_version:
-          - "1.5.9"
+          - "1.6.16"
         python:
           - "3.8"
           - "3.9"
@@ -44,7 +44,7 @@ jobs:
           path: "fal"
 
       - name: Start Docker database
-        working-directory: fal/projects/adapter/cli_tests
+        working-directory: fal/projects/adapter/integration_tests
         if: contains(fromJSON('["postgres"]'), matrix.profile)
         run: docker-compose up -d
 
@@ -68,11 +68,6 @@ jobs:
           if [[ '${{ matrix.teleport }}' == 'true' ]]
           then
             EXTRAS="$EXTRAS,teleport"
-          fi
-
-          if [[ '${{ matrix.cloud }}' == 'true' ]]
-          then
-            EXTRAS="$EXTRAS,cloud"
           fi
 
           DBT_FAL_PACKAGE=".[$EXTRAS]"
@@ -104,11 +99,6 @@ jobs:
           if [[ '${{ matrix.teleport }}' != 'true' ]]
           then
             BEHAVE_TAGS="$BEHAVE_TAGS --tags=-teleport"
-          fi
-
-          if [[ '${{ matrix.cloud }}' != 'true' ]]
-          then
-            BEHAVE_TAGS="$BEHAVE_TAGS --tags=-cloud"
           fi
 
           if [[ -z "${GITHUB_HEAD_REF}" ]]

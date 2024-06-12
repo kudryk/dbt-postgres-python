@@ -31,7 +31,7 @@ jobs:
           
       - name: Install poetry
         shell: bash
-        run: pip install poetry==1.2.*
+        run: pip install poetry==1.5.*
 
       - name: Check poetry lock
         working-directory: "projects/adapter"
