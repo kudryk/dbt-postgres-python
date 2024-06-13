@@ -17,8 +17,6 @@ from dbt.fal.adapters.teleport.impl import TeleportAdapter
 from dbt.fal.adapters.python.impl import PythonAdapter
 from dbt.parser.manifest import MacroManifest, Manifest, ManifestLoader
 
-from . import telemetry
-
 from .connections import FalConnectionManager, FalCredentials, TeleportTypeEnum
 
 from .teleport_adapter_support import wrap_db_adapter
@@ -61,7 +59,6 @@ class FalAdapterMixin(TeleportAdapter, metaclass=AdapterMeta):
     def macro_manifest(self) -> MacroManifest:
         return self._db_adapter.load_macro_manifest()
 
-    @telemetry.log_call("experimental_submit_python_job", config=True)
     def submit_python_job(
         self, parsed_model: dict, compiled_code: str
     ) -> AdapterResponse:
@@ -79,19 +76,7 @@ class FalAdapterMixin(TeleportAdapter, metaclass=AdapterMeta):
         )
 
         environment, is_local = fetch_environment(
-            self.config.project_root,
-            environment_name,
-            machine_type,
-            self.credentials
-        )
-
-        telemetry.log_api(
-            "experimental_submit_python_job_config",
-            config=self.config,
-            additional_props={
-                "is_teleport": self.is_teleport(),
-                "environment_is_local": is_local,
-            },
+            self.config.project_root, environment_name, machine_type, self.credentials
         )
 
         if self.is_teleport():
@@ -103,7 +88,7 @@ class FalAdapterMixin(TeleportAdapter, metaclass=AdapterMeta):
                     code=compiled_code,
                     teleport_info=teleport_info,
                     locations=self._relation_data_location_cache,
-                    config=db_adapter_config(self.config)
+                    config=db_adapter_config(self.config),
                 )
             else:
                 result_table_path = run_in_environment_with_teleport(
@@ -112,7 +97,7 @@ class FalAdapterMixin(TeleportAdapter, metaclass=AdapterMeta):
                     teleport_info=teleport_info,
                     locations=self._relation_data_location_cache,
                     config=db_adapter_config(self.config),
-                    adapter_type=self._db_adapter.type()
+                    adapter_type=self._db_adapter.type(),
                 )
 
             relation = self._db_adapter.Relation.create(
@@ -133,7 +118,7 @@ class FalAdapterMixin(TeleportAdapter, metaclass=AdapterMeta):
                     db_adapter_config(self.config),
                     self.manifest,
                     self.macro_manifest,
-                    self._db_adapter.type()
+                    self._db_adapter.type(),
                 )
 
     @contextmanager
@@ -227,12 +212,6 @@ class FalAdapter(FalAdapterMixin, PythonAdapter):
     def __init__(self, config):
         PythonAdapter.__init__(self, config)
         FalAdapterMixin.__init__(self, config, self._db_adapter)
-
-        telemetry.log_api(
-            "experimental_init",
-            config=config,
-            additional_props={"is_teleport": self.is_teleport()},
-        )
 
     @classmethod
     def is_cancelable(cls) -> bool:

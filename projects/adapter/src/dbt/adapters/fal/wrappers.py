@@ -9,7 +9,6 @@ from dbt.clients.jinja import MacroGenerator
 
 from ..fal_experimental.utils import cache_static
 from ..fal_experimental.impl import FalAdapterMixin
-from ..fal_experimental import telemetry
 
 
 class FalCredentialsWrapper:
@@ -50,22 +49,10 @@ class FalEncAdapterWrapper(FalAdapterMixin):
         # self._parse_replacements_ is set by metaclass=AdapterMeta
         self._parse_replacements_.update(self._db_adapter._parse_replacements_)
 
-        telemetry.log_api(
-            "encapsulate_init",
-            config=config,
-            additional_props={
-                "is_teleport": self.is_teleport(),
-                "fal_host": self.credentials.host,
-            },
-        )
-
     def submit_python_job(self, *args, **kwargs):
         return super().submit_python_job(*args, **kwargs)
 
     @available
-    @telemetry.log_call(
-        "encapsulate_db_materialization", log_args=["materialization"], config=True
-    )
     def db_materialization(self, context: dict, materialization: str):
         # NOTE: inspired by https://github.com/dbt-labs/dbt-core/blob/be4a91a0fe35a619587b7a0145e190690e3771c6/core/dbt/task/run.py#L254-L290
         materialization_macro = self.manifest.find_materialization_macro_by_name(
