@@ -19,6 +19,7 @@ classifiers = [
 python = "^3.8"
 dbt-core = ">=1.7,<=1.7.16"
 pandas = "^1.5.3"
+numpy = "<2"
 
 ## Environment management related dependencies
 virtualenv = "^20.21.1"
