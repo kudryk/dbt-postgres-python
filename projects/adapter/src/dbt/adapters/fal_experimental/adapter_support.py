@@ -2,7 +2,6 @@ import functools
 from typing import Any
 
 import pandas as pd
-import sqlalchemy
 from contextlib import contextmanager
 from dbt.adapters.base import BaseAdapter, BaseRelation, RelationType
 from dbt.adapters.base.connections import AdapterResponse, Connection
@@ -21,30 +20,13 @@ def _get_alchemy_engine(adapter: BaseAdapter, connection: Connection) -> Any:
     # The following code heavily depends on the implementation
     # details of the known adapters, hence it can't work for
     # arbitrary ones.
-    adapter_type = adapter.type()
-
-    sqlalchemy_kwargs = {}
-    format_url = lambda url: url
-
-    if adapter_type == "trino":
-        import dbt.adapters.fal_experimental.support.trino as support_trino
-
-        return support_trino.create_engine(adapter)
-
-    elif adapter_type == "sqlserver":
-        sqlalchemy_kwargs["creator"] = lambda *args, **kwargs: connection.handle
-        url = _SQLALCHEMY_DIALECTS.get(adapter_type, adapter_type) + "://"
-        url = format_url(url)
-    else:
-        message = (
-            f"dbt-fal does not support {adapter_type} adapter. ",
-            f"If you need {adapter_type} support, you can create an issue ",
-            "in our GitHub repository: https://github.com/fal-ai/fal. ",
-            "We will look into it ASAP.",
-        )
-        raise NotImplementedError(message)
-
-    return sqlalchemy.create_engine(url, **sqlalchemy_kwargs)
+    message = (
+        f"dbt-fal does not support {adapter_type} adapter. ",
+        f"If you need {adapter_type} support, you can create an issue ",
+        "in our GitHub repository: https://github.com/fal-ai/fal. ",
+        "We will look into it ASAP.",
+    )
+    raise NotImplementedError(message)
 
 
 def drop_relation_if_it_exists(adapter: BaseAdapter, relation: BaseRelation) -> None:
@@ -68,35 +50,10 @@ def write_df_to_relation(
 
     adapter_type = adapter.type()
 
-    if adapter_type == "snowflake":
-        import dbt.adapters.fal_experimental.support.snowflake as support_snowflake
-
-        return support_snowflake.write_df_to_relation(adapter, dataframe, relation)
-
-    elif adapter_type == "bigquery":
-        import dbt.adapters.fal_experimental.support.bigquery as support_bq
-
-        return support_bq.write_df_to_relation(adapter, dataframe, relation)
-
-    elif adapter_type == "duckdb":
-        import dbt.adapters.fal_experimental.support.duckdb as support_duckdb
-
-        return support_duckdb.write_df_to_relation(adapter, dataframe, relation)
-
-    elif adapter_type == "postgres":
+    if adapter_type == "postgres":
         import dbt.adapters.fal_experimental.support.postgres as support_postgres
 
         return support_postgres.write_df_to_relation(adapter, dataframe, relation)
-    elif adapter.type() == "athena":
-        import dbt.adapters.fal_experimental.support.athena as support_athena
-
-        return support_athena.write_df_to_relation(
-            adapter, dataframe, relation, if_exists
-        )
-    elif adapter_type == "redshift":
-        import dbt.adapters.fal_experimental.support.redshift as support_redshift
-
-        return support_redshift.write_df_to_relation(adapter, dataframe, relation)
 
     else:
         with new_connection(adapter, "fal:write_df_to_relation") as connection:
@@ -132,35 +89,10 @@ def read_relation_as_df(adapter: BaseAdapter, relation: BaseRelation) -> pd.Data
 
     adapter_type = adapter.type()
 
-    if adapter_type == "snowflake":
-        import dbt.adapters.fal_experimental.support.snowflake as support_snowflake
-
-        return support_snowflake.read_relation_as_df(adapter, relation)
-
-    elif adapter_type == "bigquery":
-        import dbt.adapters.fal_experimental.support.bigquery as support_bq
-
-        return support_bq.read_relation_as_df(adapter, relation)
-
-    elif adapter_type == "duckdb":
-        import dbt.adapters.fal_experimental.support.duckdb as support_duckdb
-
-        return support_duckdb.read_relation_as_df(adapter, relation)
-
-    elif adapter_type == "postgres":
+    if adapter_type == "postgres":
         import dbt.adapters.fal_experimental.support.postgres as support_postgres
 
         return support_postgres.read_relation_as_df(adapter, relation)
-
-    elif adapter.type() == "athena":
-        import dbt.adapters.fal_experimental.support.athena as support_athena
-
-        return support_athena.read_relation_as_df(adapter, relation)
-
-    elif adapter.type() == "redshift":
-        import dbt.adapters.fal_experimental.support.redshift as support_redshift
-
-        return support_redshift.read_relation_as_df(adapter, relation)
 
     else:
         with new_connection(adapter, "fal:read_relation_as_df") as connection:

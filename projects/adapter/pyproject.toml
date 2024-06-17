@@ -28,10 +28,6 @@ sqlalchemy = "^1.4.52"
 
 # Adapters
 
-## redshift
-awswrangler = { version = ">=3.0.0", extras = ["redshift"], optional = true, python = ">=3.8" }
-sqlalchemy-redshift = { version = "^0.8.9", optional = true }
-
 # teleport
 s3fs = { version = ">=2022.8.2", optional = true }
 
@@ -42,7 +38,6 @@ importlib-metadata = "^6.11.0"
 
 [tool.poetry.extras]
 postgres = []
-redshift = ["awswrangler", "sqlalchemy-redshift"]
 teleport = ["s3fs"]
 
 [tool.poetry.group.dev]
