@@ -45,7 +45,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.profile }}
+          python-version: ${{ matrix.python }}
 
       - name: Start Docker database
         working-directory: fal/projects/adapter/integration_tests
