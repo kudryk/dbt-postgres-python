@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dbt-postgres-python"
-version = "1.7.16a1"
+version = "1.7.17a2"
 description = "Run python scripts from any dbt project. This project is based on the project https://github.com/fal-ai/fal initially authored by FAL.AI."
 readme = "README.md"
 homepage = "https://github.com/kudryk/dbt-postgres-python"
