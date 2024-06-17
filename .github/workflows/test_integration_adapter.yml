@@ -80,9 +80,9 @@ jobs:
           pip install $ADAPTER_PACKAGE -e $DBT_FAL_PACKAGE
           popd
 
-      - name: Setup behave
+      - name: Install requirements
         working-directory: fal/projects/adapter/integration_tests
-        run: pip install behave
+        run: pip install -r requirements-dev.txt
 
       - name: Run tests
         id: test_run
